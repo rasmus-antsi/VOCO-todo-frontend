@@ -1,0 +1,156 @@
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 3);
+  min-height: var(--row-h);
+  padding: calc(var(--u) * 2) calc(var(--u) * 6);
+  border-bottom: var(--hair) solid var(--line);
+  /* Opaque so the dot field reads only in the open space below the list. */
+  background: var(--bg);
+  /* Rows animate on mount only, so a newly added task slides in while
+     existing rows stay put. The list drops --stagger to 0 once the first
+     screenful has dealt itself in, so a task added later appears at once —
+     a custom property because it inherits across CSS Module boundaries,
+     which a descendant selector on the list's class could not. */
+  animation: enter var(--base) var(--ease-out)
+    calc(min(var(--i), 8) * var(--stagger, 32ms)) both;
+  transition: background-color var(--fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .row:hover {
+    background: var(--surface);
+  }
+}
+
+.row[data-selected] {
+  background: var(--surface);
+}
+
+/* Signal marks the keyboard's position — never the task's content. */
+.marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--text);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--fast) var(--ease-out);
+}
+
+.row[data-selected] .marker {
+  transform: scaleY(1);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  transition: color var(--base) var(--ease-out);
+}
+
+/* Shrink-to-fit inside the flex row, capped at the container, so the struck
+   rule measures the title rather than the width of the row. */
+.text {
+  position: relative;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* A drawn rule rather than text-decoration, so it can be animated. */
+.strike {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: var(--hair);
+  background: var(--text-3);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--base) var(--ease-out);
+}
+
+.row[data-done] .title {
+  color: var(--text-3);
+}
+
+.row[data-done] .strike {
+  transform: scaleX(1);
+}
+
+/* In flight to the server: present, but visibly not yet real, and inert
+   until an id comes back that the API will accept. */
+.row[data-pending] {
+  opacity: 0.5;
+}
+
+.remove:disabled {
+  cursor: default;
+}
+
+.remove {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 4px;
+  color: var(--text-3);
+  opacity: 0;
+  transition: opacity var(--fast) var(--ease-out),
+    color var(--fast) var(--ease-out),
+    background-color var(--fast) var(--ease-out),
+    transform var(--fast) var(--ease-out);
+}
+
+.remove svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .row:hover .remove {
+    opacity: 1;
+  }
+
+  .remove:hover {
+    color: var(--text);
+    background: var(--raised);
+  }
+}
+
+.row[data-selected] .remove,
+.remove:focus-visible {
+  opacity: 1;
+}
+
+/* No hover to reveal it on touch, so it stays out. */
+@media (hover: none) {
+  .remove {
+    opacity: 1;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (max-width: 48rem) {
+  .row {
+    padding-inline: calc(var(--u) * 4);
+  }
+}

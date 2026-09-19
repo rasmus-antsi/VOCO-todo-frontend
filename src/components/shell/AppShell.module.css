@@ -1,0 +1,65 @@
+.shell {
+  height: 100%;
+  display: grid;
+  grid-template-columns: var(--rail) 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    'rail main'
+    'status status';
+  background: var(--bg);
+}
+
+.rail {
+  grid-area: rail;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-right: var(--hair) solid var(--line);
+}
+
+.main {
+  grid-area: main;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  /* A plotted canvas the rows sit on. Two background layers, painted in
+     order: the dot field, then a wash of the page colour over the top
+     quarter so the grid does not crowd the composer. Layers rather than a
+     pseudo-element, because a mask on a positioned overlay would also have
+     to be kept behind the list — this stays in the background layer where
+     the rows naturally paint over it. */
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(to bottom, var(--bg) 0, transparent 24%),
+    radial-gradient(circle at 1px 1px, var(--dot) 1px, transparent 0);
+  background-size:
+    100% 100%,
+    var(--dot-gap) var(--dot-gap);
+  background-repeat: no-repeat, repeat;
+}
+
+.status {
+  grid-area: status;
+  border-top: var(--hair) solid var(--line);
+  background: var(--surface);
+}
+
+/* Below 48rem the rail becomes a header strip above the pane. */
+@media (max-width: 48rem) {
+  .shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'rail'
+      'main'
+      'status';
+  }
+
+  .rail {
+    border-right: 0;
+    border-bottom: var(--hair) solid var(--line);
+  }
+}

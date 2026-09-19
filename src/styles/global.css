@@ -1,0 +1,141 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  /* The app owns the viewport. Only the task list scrolls. */
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 0.875rem/1.5 var(--ui);
+  letter-spacing: -0.004em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grain sits under the dot grid at about a third of its usual strength —
+   two textures at full weight read as noise, so the grid leads and this only
+   takes the flatness off. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  /* Every pressable thing answers the press. */
+  transition: transform var(--fast) var(--ease-out);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+::selection {
+  background: var(--text);
+  color: var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 3px solid var(--bg);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* The one metadata voice: small, mono, tracked out. */
+.label {
+  font: var(--label);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Reduced motion means gentler, not none: keep opacity, drop movement. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

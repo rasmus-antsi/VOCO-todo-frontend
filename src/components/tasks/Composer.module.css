@@ -1,0 +1,71 @@
+.composer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 3);
+  height: var(--row-h);
+  padding-inline: calc(var(--u) * 6);
+  border-bottom: var(--hair) solid var(--line);
+  background: var(--bg);
+  transition: background-color var(--fast) var(--ease-out);
+}
+
+.composer:focus-within {
+  background: var(--surface);
+}
+
+.caret {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--text-3);
+  transition: color var(--base) var(--ease-out);
+}
+
+.caret svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.composer:focus-within .caret {
+  color: var(--text);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.input::placeholder {
+  color: var(--text-3);
+}
+
+.affordance {
+  flex: none;
+  opacity: 0;
+  /* Never animated from scale(0) — it shrinks toward, not out of, nothing. */
+  transform: scale(0.92);
+  transition: opacity var(--fast) var(--ease-out),
+    transform var(--fast) var(--ease-out);
+}
+
+.affordance[data-ready] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 48rem) {
+  .composer {
+    padding-inline: calc(var(--u) * 4);
+  }
+}
