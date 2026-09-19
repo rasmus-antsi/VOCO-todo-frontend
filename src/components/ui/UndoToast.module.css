@@ -1,0 +1,53 @@
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--u) * 11);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 4);
+  padding: calc(var(--u) * 2.5) calc(var(--u) * 3.5);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--raised);
+  box-shadow: var(--shadow);
+
+  /* Closed: below the bar and slightly small — never scale(0); nothing in the
+     real world appears out of nothing. */
+  opacity: 0;
+  transform: translate(-50%, calc(100% + var(--u) * 11)) scale(0.96);
+  pointer-events: none;
+  transition: opacity var(--fast) var(--ease-out),
+    transform var(--fast) var(--ease-out);
+}
+
+.toast[data-open] {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  pointer-events: auto;
+  /* Enter is a touch slower than exit: arriving is information, leaving is
+     just tidying up. */
+  transition-duration: var(--base);
+}
+
+.text {
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+.undo {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 2);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: transform var(--fast) var(--ease-out),
+    opacity var(--fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .undo:hover {
+    opacity: 0.7;
+  }
+}

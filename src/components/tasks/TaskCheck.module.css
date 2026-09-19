@@ -1,0 +1,65 @@
+.box {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 4px;
+  transition: background-color var(--fast) var(--ease-out),
+    border-color var(--fast) var(--ease-out);
+}
+
+/* The real input sits on top, invisible: full keyboard and AT support with a
+   fully custom face. */
+.input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.box[data-checked] {
+  background: var(--text);
+  border-color: var(--text);
+}
+
+.tick {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: none;
+  stroke: var(--bg);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  transition: stroke-dashoffset var(--base) var(--ease-out);
+}
+
+.box[data-checked] .tick {
+  stroke-dashoffset: 0;
+}
+
+/* Keyboard path: no motion at all. */
+.box[data-instant],
+.box[data-instant] .tick {
+  transition-duration: 0ms;
+}
+
+.input:disabled {
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .box:not([data-checked]):not(:has(.input:disabled)):hover {
+    border-color: var(--text-2);
+  }
+
+  .box:not([data-checked]):not(:has(.input:disabled)):hover .tick {
+    stroke: var(--line-strong);
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,0 +1,50 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 2);
+  height: 3.25rem;
+  flex: none;
+  padding-inline: calc(var(--u) * 6);
+  border-bottom: var(--hair) solid var(--line);
+}
+
+.title {
+  font-family: var(--display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.count {
+  font-size: 0.6875rem;
+  color: var(--text-3);
+  padding-top: 1px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.help {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 2);
+  font-size: 0.75rem;
+  color: var(--text-3);
+  transition: color var(--fast) var(--ease-out),
+    transform var(--fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .help:hover {
+    color: var(--text-2);
+  }
+}
+
+/* The view chips above already name the view and its count, and shortcut
+   hints mean nothing on a touch device — so the whole bar goes. */
+@media (max-width: 48rem) {
+  .bar {
+    display: none;
+  }
+}

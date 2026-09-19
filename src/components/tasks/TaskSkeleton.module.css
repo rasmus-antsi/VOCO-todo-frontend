@@ -1,0 +1,39 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 3);
+  min-height: var(--row-h);
+  padding: calc(var(--u) * 2) calc(var(--u) * 6);
+  border-bottom: var(--hair) solid var(--line);
+  background: var(--bg);
+}
+
+.box,
+.line {
+  background: var(--line);
+  animation: pulse 1.3s var(--ease-in-out) calc(var(--i) * 90ms) infinite;
+}
+
+.box {
+  flex: none;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  border-radius: 4px;
+}
+
+.line {
+  height: 0.5rem;
+  border-radius: 2px;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (max-width: 48rem) {
+  .row {
+    padding-inline: calc(var(--u) * 4);
+  }
+}

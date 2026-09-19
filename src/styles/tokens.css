@@ -1,0 +1,118 @@
+/* ---------------------------------------------------------------------------
+   Design tokens.
+
+   System: warm monochrome. There is no hue anywhere in this file, and no pure
+   black or pure white — the greys are tinted toward brown-black and bone.
+   Neutral grey and #000/#fff are what make an interface read as generic; a
+   consistent warm cast through the whole scale is most of why this reads as
+   an object rather than a default.
+
+   THE STATE RULE — with no accent colour available, state is carried by
+   luminance, shape and inversion:
+     · keyboard position  -> a bar in --text, the brightest ink available
+     · completion         -> the checkbox inverts, plus a struck rule
+     · connection         -> a round dot when live, a square when offline
+   Never reach for a hue to signal something. If two states need separating,
+   separate them by weight or by shape.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* Type — three faces, three jobs: display, workhorse, label. */
+  --display: 'Cabinet Grotesk', 'Switzer', system-ui, sans-serif;
+  --ui: 'Switzer', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'Fragment Mono', ui-monospace, 'SF Mono', monospace;
+
+  --label: 400 0.6875rem/1 var(--mono);
+  --tracking: 0.09em;
+
+  /* Geometry — everything lands on a 4px grid */
+  --u: 0.25rem;
+  --rail: 15rem;
+  --row-h: 2.75rem;
+  --radius: 5px;
+  --radius-lg: 10px;
+  --hair: 1px;
+  --dot-gap: 22px;
+
+  /* Motion — strong curves; the built-in CSS easings are too weak.
+     Nothing here exceeds 260ms: this is an app, not a title sequence. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --fast: 140ms;
+  --base: 200ms;
+  --slow: 260ms;
+}
+
+/* --- Dark (default) — warm brown-black ink ------------------------------- */
+:root,
+:root[data-theme='dark'] {
+  --bg: #0c0b0a;
+  --surface: #131211;
+  --raised: #1c1a18;
+  --sunk: #080807;
+
+  --line: #23211e;
+  --line-strong: #35312c;
+
+  --text: #e8e6e0;
+  --text-2: #938c82;
+  --text-3: #837c72;
+
+  --dot: rgba(232, 230, 224, 0.1);
+  --grain: 0.03;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 14px 36px -16px rgba(0, 0, 0, 0.85);
+
+  color-scheme: dark;
+}
+
+/* --- Light — bone paper -------------------------------------------------- */
+:root[data-theme='light'] {
+  --bg: #e9e7e1;
+  --surface: #f1efea;
+  --raised: #f7f5f1;
+  --sunk: #ddd9d1;
+
+  --line: #d6d1c8;
+  --line-strong: #bdb7aa;
+
+  --text: #14120f;
+  --text-2: #6b645c;
+  --text-3: #666058;
+
+  --dot: rgba(20, 18, 15, 0.1);
+  --grain: 0.022;
+  --shadow: 0 1px 2px rgba(20, 18, 15, 0.07),
+    0 14px 36px -16px rgba(20, 18, 15, 0.3);
+
+  color-scheme: light;
+}
+
+/* Follow the OS only when the user has not picked a theme. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #e9e7e1;
+    --surface: #f1efea;
+    --raised: #f7f5f1;
+    --sunk: #ddd9d1;
+
+    --line: #d6d1c8;
+    --line-strong: #bdb7aa;
+
+    --text: #14120f;
+    --text-2: #6b645c;
+    --text-3: #666058;
+
+    --dot: rgba(20, 18, 15, 0.1);
+    --grain: 0.022;
+    --shadow: 0 1px 2px rgba(20, 18, 15, 0.07),
+      0 14px 36px -16px rgba(20, 18, 15, 0.3);
+
+    color-scheme: light;
+  }
+}
+
+@media (max-width: 48rem) {
+  :root {
+    --rail: 100%;
+  }
+}
