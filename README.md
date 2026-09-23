@@ -1,17 +1,28 @@
 # Instrument — task client
 
-React + Vite client for the Rust/Axum task API in `../backend`.
+React + Vite client for the Rust/Axum task API in
+[VOCO-todo-backend](https://github.com/rasmus-antsi/VOCO-todo-backend).
 
 It is built as an **application**, not a page: the shell owns the viewport, the
 task list is the only thing that scrolls, and everything can be driven from the
 keyboard.
 
+![The task list, dark theme, with a row selected from the keyboard](docs/app.png)
+
+## Stack
+
+Plain **React 19** with **Vite** — no router, no state library, no UI kit and
+no CSS framework. The only runtime dependencies are `react` and `react-dom`.
+State is `useState` inside custom hooks, and styling is **CSS Modules** plus one
+file of custom properties. For an app of this size that is less code than a
+framework would be, and nothing is hidden behind an abstraction.
+
 ## Running it
 
-The backend must be up first (it serves on `:3000`):
+The backend must be up first (it serves on `:3000`) — see its README:
 
 ```bash
-cd ../backend && cargo run
+cd ../backend && docker compose up -d && cargo run
 ```
 
 Then, in this folder:
@@ -21,14 +32,14 @@ npm install
 npm run dev      # http://localhost:5173
 ```
 
-Vite proxies `/api/*` to `http://localhost:3000` (see `vite.config.js`), so the
-client uses relative URLs and needs no CORS configuration.
+Vite proxies `/api/*` to `http://localhost:3000` (see `vite.config.js`), so in
+development the client uses relative URLs and needs no CORS configuration.
 
 | Command           | What it does                   |
 | ----------------- | ------------------------------ |
 | `npm run dev`     | Dev server with hot reload     |
 | `npm run build`   | Production bundle into `dist/` |
-| `npm run preview` | Serve the built bundle         |
+| `npm run start`   | Serve the built bundle         |
 | `npm run lint`    | ESLint over the whole project  |
 
 ## Keyboard
@@ -43,6 +54,27 @@ client uses relative URLs and needs no CORS configuration.
 | `1` `2` `3` | Switch view                      |
 | `?`       | Shortcut list                      |
 | `Esc`     | Leave the field / clear selection  |
+
+## Building and deploying
+
+```bash
+npm run build     # -> dist/
+npm run start     # serves dist/ (honours PORT)
+```
+
+The dev proxy only exists in the dev server, so a deployed build has to be told
+where the API lives:
+
+| Variable       | When            | Example                            |
+| -------------- | --------------- | ---------------------------------- |
+| `VITE_API_URL` | production only | `https://my-api.up.railway.app`    |
+
+Leave it unset locally. Vite **inlines it at build time**, so it must be set
+before `npm run build`, not after — changing it later means rebuilding. If it
+is unset, `src/api/client.js` falls back to same-origin relative URLs.
+
+Because the deployed frontend and backend sit on different origins, the backend
+needs CORS — it has a `tower-http` layer for exactly this.
 
 ## Project structure
 

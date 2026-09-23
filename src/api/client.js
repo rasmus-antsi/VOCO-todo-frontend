@@ -1,9 +1,15 @@
 /**
  * Thin fetch wrapper shared by every endpoint module.
  *
- * Vite proxies `/api` to the Rust backend on :3000 (see vite.config.js),
- * so relative URLs work in dev without any CORS setup.
+ * In dev, Vite proxies `/api` to the Rust backend on :3000 (see
+ * vite.config.js), so the default empty base gives same-origin relative URLs
+ * and no CORS setup is needed.
+ *
+ * Deployed, the two halves sit on different hosts, so `VITE_API_URL` points at
+ * the backend — e.g. `https://my-api.up.railway.app`. Vite inlines it at build
+ * time, which means it has to be set before `npm run build`, not after.
  */
+const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
 /** Error carrying the HTTP status, so callers can branch on it. */
 export class ApiError extends Error {
@@ -19,7 +25,7 @@ const JSON_HEADERS = { 'Content-Type': 'application/json' }
 async function request(path, { method = 'GET', body } = {}) {
   let res
   try {
-    res = await fetch(`/api${path}`, {
+    res = await fetch(`${BASE}/api${path}`, {
       method,
       headers: body === undefined ? undefined : JSON_HEADERS,
       body: body === undefined ? undefined : JSON.stringify(body),
